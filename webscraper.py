@@ -9,22 +9,28 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
     page = requests.get(url)
     content = page.text
     soup = BeautifulSoup(content, 'lxml')
-    stats = soup.find_all('div', class_="athlete-stats__stat")
+    winning_stats = soup.find_all('div', class_="athlete-stats__stat")
+    wins = soup.find_all('div', class_="hero-profile__division")
+    division = soup.find('p', class_="hero-profile__division-title").get_text()
+    record = soup.find('p', class_="hero-profile__division-body").get_text()
     stats_list = []
-    for i in stats:
-        stats_list.append(i.get_text())
-    print(stats_list)
-
     fighter_stats = {
-        'knockouts': stats_list[0].replace("\n", " "),
-        'submissions':stats_list[1].replace("\n", " "),
-        'firstRoundKnockouts': stats_list[2].replace("\n", " ")
+        'divsion': division,
+        'record': record,
+        'knockouts': None,
+        'submissions':None,
+        'FRF': None
     }
+    for i in winning_stats:
+        if "Knockout" in i.get_text().replace("\n", " "):
+            fighter_stats['knockouts'] = i.get_text().replace("\n", " ")
+        elif "Finishes" in i.get_text().replace("\n", " "):
+            fighter_stats['FRF'] = i.get_text().replace("\n", " ")
+        elif "Submission" in i.get_text().replace("\n", " "):
+            fighter_stats['submissions']  = i.get_text().replace("\n", " ")
+        # stats_list.append(i.get_text())
 
     print(fighter_stats)
-
-
-
-
-get_fighter_stats('sean', 'strickland')
+     
+get_fighter_stats('sean', 'omalley')
 
