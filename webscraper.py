@@ -4,6 +4,15 @@ import requests
 import json
 import re
 
+def calculate_takedown_accuracy(strikes):
+    if strikes[2].get_text() == '':
+        return 0
+    if strikes[3].get_text() == '':
+        return 0
+    else:
+        accuracy = int(strikes[2].get_text())/int(strikes[3].get_text())
+        return accuracy
+
 def extract_records(input):
    matches = re.match(r'(\d+)-(\d+)-(\d+)', input)
    if matches:
@@ -24,6 +33,8 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
     soup = BeautifulSoup(content, 'lxml')
     name = soup.find('h1', class_="hero-profile__name")
     age = soup.find('div', class_="field field--name-age field--type-integer field--label-hidden field__item")
+    physique = soup.find_all('div', class_="c-bio__text")
+    print(physique)
     winning_stats = soup.find_all('div', class_="athlete-stats__stat")
     division = soup.find('p', class_="hero-profile__division-title").get_text()
     strikes = soup.find_all('dd', class_="c-overlap__stats-value")
@@ -33,6 +44,12 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
         'name': name.get_text(),
         'age': age.get_text(), 
         'divsion': division,
+        'physique': {
+            'height': None,
+            'weight': None,
+            'reach': None,
+            'leg reach': None
+        },
         'record': extract_records(record),
         'knockouts': None,
         'submissions': None,
@@ -51,7 +68,7 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
         'Takedowns': {
             'landed': strikes[2].get_text(),
             'attempted': strikes[3].get_text(),
-            'accuracy': (int(strikes[2].get_text())) / (int(strikes[3].get_text()))
+            'accuracy': calculate_takedown_accuracy(strikes)
         }
     }
     
@@ -65,5 +82,5 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
 
     print(fighter_stats)
      
-get_fighter_stats('sean', 'omalley')
+get_fighter_stats('sean', 'strickland')
 
