@@ -4,6 +4,18 @@ import requests
 import json
 import re
 
+def extract_physique(physique):
+    cleaned_list = []
+    for i in physique:
+        cleaned_list.append(i.get_text())
+    datalist = [cleaned_list[0]] + cleaned_list[-5:]
+    variable_names = ['status', 'height', 'weight', 'debut', 'reach', 'leg reach']
+    variables = {}
+    for name, value in zip(variable_names, datalist + [None] * (len(variable_names)-len(datalist))):
+        variables[name] = value
+    
+    return variables
+
 def calculate_striking_accruacy(strikes):
     if strikes[0].get_text() == "":
         return 0
@@ -46,19 +58,13 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
     winning_stats = soup.find_all('div', class_="athlete-stats__stat")
     division = soup.find('p', class_="hero-profile__division-title").get_text()
     strikes = soup.find_all('dd', class_="c-overlap__stats-value")
-    print(strikes)
     significant_strikes = soup.find_all('div', class_="c-stat-compare__number")
     record = soup.find('p', class_="hero-profile__division-body").get_text()
     fighter_stats = {
         'name': name.get_text(),
         'age': age.get_text(), 
         'divsion': division,
-        'physique': {
-            'height': None,
-            'weight': None,
-            'reach': None,
-            'leg reach': None
-        },
+        'physique': extract_physique(physique),
         'record': extract_records(record),
         'knockouts': None,
         'submissions': None,
@@ -91,5 +97,5 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
 
     print(fighter_stats)
      
-get_fighter_stats('alex', 'pereira')
+get_fighter_stats('sean', 'omalley')
 
