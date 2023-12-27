@@ -4,13 +4,22 @@ import requests
 import json
 import re
 
-def calculate_takedown_accuracy(strikes):
-    if strikes[2].get_text() == '':
+def calculate_striking_accruacy(strikes):
+    if strikes[0].get_text() == "":
         return 0
-    if strikes[3].get_text() == '':
+    if strikes[1].get_text() == "":
+        return 0 
+    else:
+        accuracy = (int(strikes[0].get_text())/int(strikes[1].get_text()))
+        return accuracy
+
+def calculate_takedown_accuracy(strikes):
+    if strikes[2].get_text() == "":
+        return 0
+    if strikes[3].get_text() == "":
         return 0
     else:
-        accuracy = int(strikes[2].get_text())/int(strikes[3].get_text())
+        accuracy = (int(strikes[2].get_text())/int(strikes[3].get_text()))
         return accuracy
 
 def extract_records(input):
@@ -34,10 +43,10 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
     name = soup.find('h1', class_="hero-profile__name")
     age = soup.find('div', class_="field field--name-age field--type-integer field--label-hidden field__item")
     physique = soup.find_all('div', class_="c-bio__text")
-    print(physique)
     winning_stats = soup.find_all('div', class_="athlete-stats__stat")
     division = soup.find('p', class_="hero-profile__division-title").get_text()
     strikes = soup.find_all('dd', class_="c-overlap__stats-value")
+    print(strikes)
     significant_strikes = soup.find_all('div', class_="c-stat-compare__number")
     record = soup.find('p', class_="hero-profile__division-body").get_text()
     fighter_stats = {
@@ -57,7 +66,7 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
         'Stikes': {
             'landed': strikes[0].get_text(),
             'attempted': strikes[1].get_text(),
-            'accuracy': (int(strikes[0].get_text())/int(strikes[1].get_text()))
+            'accuracy': calculate_striking_accruacy(strikes)
         },
         'offense': {
             'sig. str. landed. per min':remove_unwanted_spaces(significant_strikes[0].get_text()),
@@ -82,5 +91,5 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
 
     print(fighter_stats)
      
-get_fighter_stats('sean', 'strickland')
+get_fighter_stats('alex', 'pereira')
 
