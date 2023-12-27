@@ -51,7 +51,7 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
         'Takedowns': {
             'landed': strikes[2].get_text(),
             'attempted': strikes[3].get_text(),
-            'accuracy': (int(strikes[2].get_text())) / ((int(strikes[3].get_text()))-int(strikes[2].get_text()))
+            'accuracy': (int(strikes[2].get_text())) / (int(strikes[3].get_text()))
         }
     }
     
@@ -65,5 +65,5 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
 
     print(fighter_stats)
      
-get_fighter_stats('sean', 'strickland')
+get_fighter_stats('sean', 'omalley')
 
