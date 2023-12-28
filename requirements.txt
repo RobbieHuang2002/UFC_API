@@ -1,3 +1,5 @@
 beautifulsoup4
 lxml
 Flask
+re
+requests
