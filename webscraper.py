@@ -95,6 +95,7 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
         elif "Submission" in i.get_text():
             fighter_stats['submissions']  = remove_unwanted_spaces(i.get_text())
 
-    print(fighter_stats)
-     
-get_fighter_stats('sean', 'omalley')
+    return fighter_stats
+
+if __name__ == '__main__':
+    print(get_fighter_stats('sean', 'omalley'))
