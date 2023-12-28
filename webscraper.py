@@ -98,4 +98,3 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
     print(fighter_stats)
      
 get_fighter_stats('sean', 'omalley')
-
