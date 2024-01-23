@@ -3,6 +3,7 @@ import lxml
 import requests
 import json
 import re
+import sys
 
 def extract_physique(physique):
     cleaned_list = []
@@ -98,4 +99,4 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
     return fighter_stats
 
 if __name__ == '__main__':
-    print(get_fighter_stats('magomed', 'ankalaev'))
+    print(get_fighter_stats('sean', 'omalley'))
