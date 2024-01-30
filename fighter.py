@@ -54,8 +54,11 @@ def remove_unwanted_spaces(sentence):
     cleaned_sentence = cleaned_sentence.strip()
     return cleaned_sentence
 
-def get_fighter_stats(fighterFirstName,fighterLastName):
-    url = f'https://www.ufc.com/athlete/{fighterFirstName}-{fighterLastName}'
+def get_fighter_stats(fighterFirstName,fighterMiddleName,fighterLastName):
+    if fighterMiddleName is None:
+        url = f'https://www.ufc.com/athlete/{fighterFirstName}-{fighterLastName}'
+    else:
+        url = f'https://www.ufc.com/athlete/{fighterFirstName}-{fighterMiddleName}-{fighterLastName}'
     page = requests.get(url)
     content = page.text
     soup = BeautifulSoup(content, 'lxml')
@@ -115,7 +118,9 @@ if __name__ == '__main__':
             first_name = full_name[0]
             middle_name = full_name[1]
             last_name  = full_name[2]
+            print(get_fighter_stats(first_name, middle_name, last_name))
         else:
             first_name = full_name[0]
+            middle_name = None
             last_name = full_name[1]  
-            print(get_fighter_stats(first_name, last_name))    
+            print(get_fighter_stats(first_name, middle_name, last_name))    
