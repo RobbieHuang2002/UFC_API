@@ -99,6 +99,4 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
     return fighter_stats
 
 if __name__ == '__main__':
-    firstname = sys.argv[1]
-    lastname = sys.argv[2]
-    print(get_fighter_stats(firstname, lastname))
+    print(get_fighter_stats('sean', 'omalley'))
