@@ -4,6 +4,8 @@ import requests
 import json
 import re
 import sys
+from top_fighters import UFCRankingScraper
+
 
 def extract_physique(physique):
     cleaned_list = []
@@ -27,13 +29,17 @@ def calculate_striking_accruacy(strikes):
         return accuracy
 
 def calculate_takedown_accuracy(strikes):
-    if strikes[2].get_text() == "":
-        return 0
-    if strikes[3].get_text() == "":
-        return 0
+    strikes_length = len(strikes)
+    if strikes_length <=2:
+        accuracy = 0
     else:
-        accuracy = (int(strikes[2].get_text())/int(strikes[3].get_text()))
-        return accuracy
+        if strikes[2].get_text() == "":
+            return 0
+        if strikes[3].get_text() == "":
+            return 0
+        else:
+            accuracy = (int(strikes[2].get_text())/int(strikes[3].get_text()))
+            return accuracy
 
 def extract_records(input):
    matches = re.match(r'(\d+)-(\d+)-(\d+)', input)
@@ -48,7 +54,7 @@ def remove_unwanted_spaces(sentence):
     cleaned_sentence = cleaned_sentence.strip()
     return cleaned_sentence
 
-def get_fighter_stats(fighterFirstName, fighterLastName):
+def get_fighter_stats(fighterFirstName,fighterLastName):
     url = f'https://www.ufc.com/athlete/{fighterFirstName}-{fighterLastName}'
     page = requests.get(url)
     content = page.text
@@ -59,6 +65,7 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
     winning_stats = soup.find_all('div', class_="athlete-stats__stat")
     division = soup.find('p', class_="hero-profile__division-title").get_text()
     strikes = soup.find_all('dd', class_="c-overlap__stats-value")
+    length_of_strikes = len(strikes)        
     significant_strikes = soup.find_all('div', class_="c-stat-compare__number")
     record = soup.find('p', class_="hero-profile__division-body").get_text()
     fighter_stats = {
@@ -82,8 +89,8 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
             'submission avg':remove_unwanted_spaces(significant_strikes[3].get_text()),
         },
         'Takedowns': {
-            'landed': strikes[2].get_text(),
-            'attempted': strikes[3].get_text(),
+            'landed': strikes[2].get_text() if length_of_strikes == 4 else None,
+            'attempted': strikes[3].get_text() if length_of_strikes == 4 else None,
             'accuracy': calculate_takedown_accuracy(strikes)
         }
     }
@@ -99,4 +106,16 @@ def get_fighter_stats(fighterFirstName, fighterLastName):
     return fighter_stats
 
 if __name__ == '__main__':
-    print(get_fighter_stats('sean', 'omalley'))
+    top_fighter_scraper = UFCRankingScraper()
+    names_of_fighters = top_fighter_scraper.get_top_fighters('Middleweight')
+
+    for name in names_of_fighters:
+        full_name = name.split()
+        if len(full_name) == 3:
+            first_name = full_name[0]
+            middle_name = full_name[1]
+            last_name  = full_name[2]
+        else:
+            first_name = full_name[0]
+            last_name = full_name[1]  
+            print(get_fighter_stats(first_name, last_name))    
