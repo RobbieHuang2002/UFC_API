@@ -33,10 +33,10 @@ class UFCRankingScraper:
                     names.append(a_tag.text)
 
         # find the rest of the fighters in the division
-        td_elements = desired_div.find_all('td', class_='views-field views-field-title')
-        for td in td_elements:
+                td_elements = desired_div.find_all('td', class_='views-field views-field-title')
+                for td in td_elements:
             # add the fighters names into the names array
-            names.append(td.get_text(strip=True))
+                    names.append(td.get_text(strip=True))
 
         return names
 
