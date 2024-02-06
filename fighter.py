@@ -58,7 +58,7 @@ class FighterStatsExtractor:
         return cleaned_sentence
 
     def get_fighter_stats(self,fighterFirstName,fighterMiddleName,fighterLastName):
-        if fighterMiddleName is None or fighterMiddleName == '':
+        if fighterMiddleName is None or fighterMiddleName == '' or fighterMiddleName == '&':
             url = f'https://www.ufc.com/athlete/{fighterFirstName}-{fighterLastName}'
         else:
             url = f'https://www.ufc.com/athlete/{fighterFirstName}-{fighterMiddleName}-{fighterLastName}'
