@@ -23,8 +23,8 @@ def root():
 @app.get("/fighter")
 # example of a request
 # http://127.0.0.1:8000/fighter?first_name=sean&middle_name=&last_name=strickland
-async def fighter(first_name:str, middle_name:str, last_name:str):
-    stats = FighterStatsExtractor().get_fighter_stats(first_name, middle_name, last_name)
+async def fighter(firstName:str, middleName:str, lastName:str):
+    stats = FighterStatsExtractor().get_fighter_stats(firstName, middleName, lastName)
     return {"stats": stats}
 
 
