@@ -16,6 +16,10 @@ def root():
     return {"Hello": "World"}
 
 
+@app.get("/ping")
+def root():
+    return {"Testing": "Complete"}
+
 @app.get("/fighter")
 # example of a request
 # http://127.0.0.1:8000/fighter?first_name=sean&middle_name=&last_name=strickland
