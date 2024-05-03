@@ -110,4 +110,7 @@ class FighterStatsExtractor:
                 fighter_stats['submissions']  = self.remove_unwanted_spaces(i.get_text())
 
         return fighter_stats
- 
+
+if __name__ == '__main__':
+    print(FighterStatsExtractor().get_fighter_stats('Sean', '', 'Strickland'))
+    
