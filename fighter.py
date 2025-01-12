@@ -28,7 +28,7 @@ class FighterStatsExtractor:
         if strikes[1].get_text() == "":
             return 0 
         else:
-            accuracy = (int(strikes[0].get_text())/int(strikes[1].get_text()))
+            accuracy = int(int(strikes[0].get_text())/int(strikes[1].get_text()))
             return accuracy
 
     def calculate_takedown_accuracy(self, strikes):
@@ -41,7 +41,7 @@ class FighterStatsExtractor:
             if strikes[3].get_text() == "":
                 return 0
             else:
-                accuracy = (int(strikes[2].get_text())/int(strikes[3].get_text()))
+                accuracy = int(int(strikes[2].get_text())/int(strikes[3].get_text()))
                 return accuracy
 
     def extract_records(self,input):
@@ -112,5 +112,5 @@ class FighterStatsExtractor:
         return fighter_stats
 
 if __name__ == '__main__':
-    print(FighterStatsExtractor().get_fighter_stats('Sean', '', 'Strickland'))
+    print(FighterStatsExtractor().get_fighter_stats('sean', '', 'strickland'))
     
