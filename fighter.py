@@ -14,7 +14,7 @@ class FighterStatsExtractor:
         cleaned_list = []
         for i in physique:
             cleaned_list.append(i.get_text())
-        datalist = [cleaned_list[0]] + cleaned_list[-5:]
+        datalist = [cleaned_list[0]] + cleaned_list[-8:]
         variable_names = ['status', 'height', 'weight', 'debut', 'reach', 'leg reach']
         variables = {}
         for name, value in zip(variable_names, datalist + [None] * (len(variable_names)-len(datalist))):
@@ -62,24 +62,27 @@ class FighterStatsExtractor:
             url = f'https://www.ufc.com/athlete/{fighterFirstName}-{fighterLastName}'
         else:
             url = f'https://www.ufc.com/athlete/{fighterFirstName}-{fighterMiddleName}-{fighterLastName}'
-        page = requests.get(url)
+        headers = {
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        }
+        page = requests.get(url, headers=headers)
         content = page.text
         soup = BeautifulSoup(content, 'lxml')
         name = soup.find('h1', class_="hero-profile__name")
         age = soup.find('div', class_="field field--name-age field--type-integer field--label-hidden field__item")
         physique = soup.find_all('div', class_="c-bio__text")
         winning_stats = soup.find_all('div', class_="athlete-stats__stat")
-        division = soup.find('p', class_="hero-profile__division-title").get_text()
+        division_elem = soup.find('p', class_="hero-profile__division-title")
         strikes = soup.find_all('dd', class_="c-overlap__stats-value")
         length_of_strikes = len(strikes)        
         significant_strikes = soup.find_all('div', class_="c-stat-compare__number")
-        record = soup.find('p', class_="hero-profile__division-body").get_text()
+        record_elem = soup.find('p', class_="hero-profile__division-body")
         fighter_stats = {
-            'name': name.get_text(),
-            'age': age.get_text(), 
-            'divsion': division,
+            'name': name.get_text() if name else None,
+            'age': age.get_text() if age else None, 
+            'divsion': division_elem.get_text() if division_elem else None,
             'physique': self.extract_physique(physique),
-            'record': self.extract_records(record),
+            'record': self.extract_records(record_elem.get_text() if record_elem else ''),
             'knockouts': None,
             'submissions': None,
             'FRF': None,
