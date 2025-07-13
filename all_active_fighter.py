@@ -30,7 +30,10 @@ class ActiveFighterNameExtractor:
             print(f"Fetching page {counter}...")
             url = 'https://www.ufc.com/athletes/all'
             response = requests.get(url, params={"page": counter, "filters[0]": "status:23"})
-            
+            headers = {
+                "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+            }
+            response = requests.get(url, params={"page": counter, "filters[0]": "status:23"}, headers=headers)
             soup = BeautifulSoup(response.text, "html.parser")
 
             fighters = soup.find_all("div", class_="c-listing-athlete-flipcard white")
